@@ -1,22 +1,12 @@
-function canFinish(numCourses, prerequisites) {
-  const graph = new Array(numCourses).fill(0).map(() => []);
-  const inDegree = new Array(numCourses).fill(0);
-  for (const [course, pre] of prerequisites) {
-    graph[pre].push(course);
-    inDegree[course]++;
+function lengthOfLongestSubstring(s) {
+  if (s.length === 0) return 0;
+  const map = new Map();
+  let maxLength = 0;
+  let left = 0;
+  for (let right = 0; right < s.length; right++) {
+    if (map.has(s[right])) left = Math.max(left, map.get(s[right]) + 1);
+    map.set(s[right], right);
+    maxLength = Math.max(maxLength, right - left + 1);
   }
-  const queue = [];
-  for (let i = 0; i < numCourses; i++) {
-    if (inDegree[i] === 0) queue.push(i);
-  }
-  let count = 0;
-  while (queue.length) {
-    const course = queue.shift();
-    count++;
-    for (const nextCourse of graph[course]) {
-      inDegree[nextCourse]--;
-      if (inDegree[nextCourse] === 0) queue.push(nextCourse);
-    }
-  }
-  return count === numCourses;
+  return maxLength;
 }
